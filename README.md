@@ -76,11 +76,15 @@ Create a database in MySQL:
 CREATE DATABASE health-screening;
 ```
 
-# Build
+## Build
+```bash
 mvn clean install
+```
 
-# Run
+## Run
+```bash
 mvn spring-boot:run
+```
 
 ## License
 This project is licensed under the MIT License.
