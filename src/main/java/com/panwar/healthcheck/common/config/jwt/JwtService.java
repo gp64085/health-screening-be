@@ -21,7 +21,7 @@ public class JwtService {
 	private String jwtSecret;
 
 	@Value("${jwt.expiration}")
-	private int jwtExpirationMs;
+	private int jwtExpirationInSeconds;
 
 	/**
 	 * Extracts the username from a JWT token.
@@ -70,11 +70,11 @@ public class JwtService {
 	 * @param username    the username to generate the token for
 	 * @return a JWT token that can be used to authenticate the user
 	 * @throws JwtException if there is an error generating the token
-	 * @see #jwtExpirationMs
+	 * @see #jwtExpirationInSeconds
 	 */
 	public String generateToken(Map<String, Object> extraClaims, String username) throws JwtException {
 		final Date now = new Date();
-		Date expiryTime = new Date(now.getTime() + jwtExpirationMs * 1000);
+		Date expiryTime = new Date(now.getTime() + jwtExpirationInSeconds * 1000);
 
 		return Jwts.builder().claims(extraClaims).subject(username).issuedAt(now).expiration(expiryTime)
 				.signWith(getSigningKey(), Jwts.SIG.HS256).compact();
