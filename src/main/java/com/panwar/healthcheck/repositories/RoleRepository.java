@@ -11,6 +11,6 @@ import com.panwar.healthcheck.utils.enums.UserRoleEnum;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-	Optional<Role> findByName(UserRoleEnum admin);
+	Optional<Role> findByName(UserRoleEnum roleName);
 
 }
