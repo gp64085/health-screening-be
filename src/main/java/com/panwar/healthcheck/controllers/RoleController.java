@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.panwar.healthcheck.common.GenericCrudController;
+import com.panwar.healthcheck.common.controllers.GenericCrudController;
+import com.panwar.healthcheck.models.dto.ApiResponse;
 import com.panwar.healthcheck.models.dto.RoleRequest;
 import com.panwar.healthcheck.models.dto.RoleResponse;
 import com.panwar.healthcheck.services.RoleService;
 
 import lombok.AllArgsConstructor;
 
-@RestController("*")
+@RestController
 @RequestMapping("/roles")
 @AllArgsConstructor
 public class RoleController implements GenericCrudController<RoleRequest, RoleResponse, Long> {
@@ -34,7 +35,7 @@ public class RoleController implements GenericCrudController<RoleRequest, RoleRe
 
     @Override
     @GetMapping("")
-    public List<RoleResponse> getAll() {
+    public ApiResponse<List<RoleResponse>> getAll() {
         return roleService.getAll();
     }
 }

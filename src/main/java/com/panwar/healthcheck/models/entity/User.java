@@ -1,5 +1,13 @@
 package com.panwar.healthcheck.models.entity;
 
+import jakarta.persistence.Transient;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.panwar.healthcheck.utils.RegexConstants;
 import com.panwar.healthcheck.utils.messages.ValidationMessages;
 
@@ -26,30 +34,61 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class User extends AbstractBaseEntity {
+public class User extends AbstractBaseEntity implements UserDetails {
 
-	@NotBlank(message = ValidationMessages.NAME_REQUIRED)
-	@Size(min = 2, max = 50, message = ValidationMessages.NAME_VALIDATION)
 	private String name;
 
-	@NotBlank(message = ValidationMessages.EMAIL_REQUIRED)
-	@Email(message = ValidationMessages.EMAIL_VALIDATION)
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	private String email;
 
-	@NotBlank(message = ValidationMessages.MOBILE_REQUIRED)
-	@Size(min = 10, max = 15, message = ValidationMessages.MOBILE_VALIDATION)
 	private String mobile;
 
-	@NotBlank(message = ValidationMessages.PASSWORD_REQUIRED)
-	@Pattern(regexp = RegexConstants.PASSWORD_REGEX, message = ValidationMessages.PASSWORD_VALIDATION)
+	@JsonIgnore
+	@Column(nullable = false)
 	private String password;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
-	
+
 	@Column(nullable = false)
-	private Boolean active;
-	
+	private Boolean active = true;
+
+	@Override
+	@JsonIgnore
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.singleton(() -> "ROLE_" + role.getName());
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	@JsonIgnore
+	@Transient
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	@JsonIgnore
+	@Transient
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	@JsonIgnore
+	@Transient
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	@Transient
+	public boolean isEnabled() {
+		return Boolean.TRUE.equals(active);
+	}
 }
