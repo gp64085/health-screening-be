@@ -1,20 +1,24 @@
-package com.panwar.healthcheck.common;
+package com.panwar.healthcheck.common.services;
 
 import java.util.List;
 
-public interface GenericCrudController<Req, Res, ID> {
+import com.panwar.healthcheck.models.dto.ApiResponse;
+
+public interface GenericCrudService<Req, Res, ID> {
+    
     /**
      * Get element by id
      * @param id
-     * @return
+     * @return return element
      */
     Res getById(ID id);
 
     /**
-     * Return all the elements
-     * @return
-     */
-    List<Res> getAll();
+     * Get all elements
+     * @return return all elements
+    */
+    ApiResponse<List<Res>> getAll();
+
     default Res create(Req requestDto) {
         throw new UnsupportedOperationException("Create operation is not supported");
     }

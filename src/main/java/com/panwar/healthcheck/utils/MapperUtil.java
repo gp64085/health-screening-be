@@ -2,6 +2,9 @@ package com.panwar.healthcheck.utils;
 
 import org.modelmapper.ModelMapper;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class MapperUtil {
     private static final ModelMapper modelmapper = new ModelMapper();
 
