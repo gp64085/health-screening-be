@@ -1,6 +1,6 @@
 package com.panwar.healthcheck.models.entity;
 
-import java.beans.Transient;
+import jakarta.persistence.Transient;
 import java.util.Collection;
 import java.util.Collections;
 
