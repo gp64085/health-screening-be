@@ -1,6 +1,5 @@
 package com.panwar.healthcheck.models.entity;
 
-import jakarta.persistence.Transient;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -8,8 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.panwar.healthcheck.utils.RegexConstants;
-import com.panwar.healthcheck.utils.messages.ValidationMessages;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,10 +14,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -87,6 +81,7 @@ public class User extends AbstractBaseEntity implements UserDetails {
 	}
 
 	@Override
+	@JsonIgnore
 	@Transient
 	public boolean isEnabled() {
 		return Boolean.TRUE.equals(active);

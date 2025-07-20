@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.panwar.healthcheck.models.dto.ApiResponse;
 import com.panwar.healthcheck.models.dto.AuthResponse;
+import com.panwar.healthcheck.models.dto.LoginRequest;
 import com.panwar.healthcheck.models.dto.RegisterRequest;
 import com.panwar.healthcheck.services.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 
@@ -25,8 +27,14 @@ public class AuthController {
 	
 	@Operation(description = "Register a new user", method = "POST")
 	@PostMapping("register")
-	public ApiResponse<AuthResponse> create(@RequestBody RegisterRequest requestDto) {
+	public ApiResponse<AuthResponse> create(@Valid @RequestBody RegisterRequest requestDto) {
 		return authService.register(requestDto);
+	}
+	
+	@Operation(description = "Login a user", method = "POST")
+	@PostMapping("login")
+	public ApiResponse<AuthResponse> login(@Valid @RequestBody LoginRequest requestDto) {
+		return authService.login(requestDto);
 	}
 	
 }
