@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.panwar.healthcheck.models.dto.ApiResponse;
 import com.panwar.healthcheck.models.dto.AuthResponse;
+import com.panwar.healthcheck.models.dto.LoginRequest;
 import com.panwar.healthcheck.models.dto.RegisterRequest;
 import com.panwar.healthcheck.services.AuthService;
 
@@ -27,6 +28,12 @@ public class AuthController {
 	@PostMapping("register")
 	public ApiResponse<AuthResponse> create(@RequestBody RegisterRequest requestDto) {
 		return authService.register(requestDto);
+	}
+	
+	@Operation(description = "Login a user", method = "POST")
+	@PostMapping("login")
+	public ApiResponse<AuthResponse> login(@RequestBody LoginRequest requestDto) {
+		return authService.login(requestDto);
 	}
 	
 }
