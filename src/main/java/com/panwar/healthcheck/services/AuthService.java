@@ -43,7 +43,7 @@ public class AuthService {
 	}
 
 	public ApiResponse<AuthResponse> login(LoginRequest requestDto) {
-		User user = userRepository.findByEmail(requestDto.email()).orElse(null);
+		User user = userRepository.findByEmailAndActiveTrue(requestDto.email()).orElse(null);
 		if (user != null && passwordEncoder.matches(requestDto.password(), user.getPassword())) {
 			Map<String, Object> claims = new HashMap<>();
 			claims.put("role", user.getRole().getName());
@@ -51,6 +51,6 @@ public class AuthService {
 			String token = jwtService.generateToken(claims, user.getEmail());
 			return ApiResponse.success(new AuthResponse(token, user), "User logged in successfully");
 		}
-		return null;
+		return ApiResponse.error(null, "Invalid email or password");
 	}
 }
