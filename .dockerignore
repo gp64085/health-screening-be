@@ -1,0 +1,27 @@
+# Build output
+/target
+
+# Maven wrapper cache (not needed when using maven image)
+/.mvn/
+/mvnw
+/mvnw.cmd
+
+# VCS
+/.git
+/.gitignore
+
+# IDE
+/.idea/
+/.vscode/
+/.settings/
+.classpath
+.project
+.factorypath
+
+# OS files
+**/.DS_Store
+**/Thumbs.db
+
+# Docker and compose files (not needed in build context)
+Dockerfile
+docker-compose.yml
