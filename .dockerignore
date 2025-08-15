@@ -27,5 +27,4 @@
 **/Thumbs.db
 
 # Docker and compose files (not needed in build context)
-Dockerfile
 docker-compose.yml
