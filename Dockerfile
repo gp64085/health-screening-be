@@ -46,8 +46,8 @@ ENV SERVER_PORT=8082
 EXPOSE 8082
 
 # Run as non-root
+RUN chown -R app:app /app
 USER app
-
 
 # JVM options can be provided via JAVA_TOOL_OPTIONS
 CMD ["java", "-XX:MaxRAMPercentage=75", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/app.jar"]
