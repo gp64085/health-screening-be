@@ -1,0 +1,48 @@
+
+services:
+  db:
+    image: ${MYSQL_IMAGE:-mysql:8.0}
+    container_name: ${MYSQL_CONTAINER_NAME:-health-screening-mysql}
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-health-screening}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_USER: ${MYSQL_USER:-healthappuser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-healthapp1234$}
+    command: ["--default-authentication-plugin=mysql_native_password", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - "${MYSQL_PORT:-3307}:3306"
+    volumes:
+      - ${MYSQL_DATA_VOLUME:-mysql_data}:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: ${BUILD_CONTEXT:-.}
+      dockerfile: ${DOCKERFILE_PATH:-Dockerfile}
+      args:
+        SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+    image: ${APP_IMAGE:-health-screening-be:latest}
+    container_name: ${APP_CONTAINER_NAME:-health-screening-app}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://db:3306/health-screening?useSSL=false&allowPublicKeyRetrieval=true}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-appuser}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-apppassword}
+      SERVER_PORT: ${SERVER_PORT:-8082}
+      JWT_SECRET: ${JWT_SECRET:-replace_me}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-36000}
+    ports:
+      - "${APP_PORT:-8082}:8082"
+
+volumes:
+  mysql_data:
+    driver: local
