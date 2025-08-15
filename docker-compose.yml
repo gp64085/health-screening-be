@@ -25,7 +25,7 @@ services:
       context: ${BUILD_CONTEXT:-.}
       dockerfile: ${DOCKERFILE_PATH:-Dockerfile}
       args:
-        SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
+        SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
     image: ${APP_IMAGE:-health-screening-be:latest}
     container_name: ${APP_CONTAINER_NAME:-health-screening-app}
     depends_on:
