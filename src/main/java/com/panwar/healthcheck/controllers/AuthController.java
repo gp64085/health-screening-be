@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 
 @Tag(name = "Authentication", description = "Handles login and registration")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @AllArgsConstructor
 public class AuthController {
 	

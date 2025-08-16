@@ -1,13 +1,16 @@
 package com.panwar.healthcheck.utils;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
-// TODO: Will use this class for mapping in future
+import lombok.AllArgsConstructor;
+
+@Component
+@AllArgsConstructor
 public class MapperUtil {
-    private static final ModelMapper modelmapper = new ModelMapper();
+    private final ModelMapper modelMapper;
 
-    public static <S, D> D map(S source, Class<D> destinationClass) {
-        return modelmapper.map(source, destinationClass);
+    public <S, D> D map(S source, Class<D> destinationClass) {
+        return modelMapper.map(source, destinationClass);
     }
-
 }

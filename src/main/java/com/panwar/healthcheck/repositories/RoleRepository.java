@@ -12,5 +12,7 @@ import com.panwar.healthcheck.utils.enums.UserRoleEnum;
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
 	Optional<Role> findByName(UserRoleEnum roleName);
+	
+	boolean existsByName(UserRoleEnum roleName);
 
 }
