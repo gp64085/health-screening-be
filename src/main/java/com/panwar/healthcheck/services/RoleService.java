@@ -3,9 +3,9 @@ package com.panwar.healthcheck.services;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.panwar.healthcheck.common.exceptions.BadRequestException;
 import com.panwar.healthcheck.common.exceptions.ResourceNotFoundException;
 import com.panwar.healthcheck.common.services.GenericCrudService;
 import com.panwar.healthcheck.models.dto.ApiResponse;
@@ -13,10 +13,9 @@ import com.panwar.healthcheck.models.dto.RoleRequest;
 import com.panwar.healthcheck.models.dto.RoleResponse;
 import com.panwar.healthcheck.models.entity.Role;
 import com.panwar.healthcheck.repositories.RoleRepository;
-import com.panwar.healthcheck.utils.MapperUtil;
+import com.panwar.healthcheck.utils.ResponseUtil;
 import com.panwar.healthcheck.utils.enums.UserRoleEnum;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,14 +26,14 @@ public class RoleService implements GenericCrudService<RoleRequest, RoleResponse
     private final RoleRepository roleRepository;
 
     @Override
-    public ApiResponse<RoleResponse> create(RoleRequest requestDto) {
+    public ResponseEntity<ApiResponse<RoleResponse>> create(RoleRequest requestDto) {
         log.info("Creating new role with name: {}", requestDto.name());
 
         UserRoleEnum roleEnum = UserRoleEnum.fromString(requestDto.name());
 
         // Check if role with same name already exists
         if (roleRepository.existsByName(roleEnum)) {
-            throw new BadRequestException("Role with name '" + requestDto.name() + "' already exists");
+            return ResponseUtil.badRequest("Role with name '" + requestDto.name() + "' already exists");
         }
 
         try {
@@ -46,29 +45,29 @@ public class RoleService implements GenericCrudService<RoleRequest, RoleResponse
             var savedRole = roleRepository.save(role);
 
             log.info("Successfully created role with ID: {}", savedRole.getId());
-            return ApiResponse.success(prepareRoleResponse(savedRole), "Role created successfully");
+            return ResponseUtil.created(prepareRoleResponse(savedRole), "Role created successfully");
         } catch (Exception e) {
             log.error("Error creating role: {}", e.getMessage());
             if (e instanceof SQLException && e.getCause() != null && e.getCause().getMessage().contains("duplicate")) {
                 log.error("SQL error creating role: {}", e.getCause());
-                throw new BadRequestException("Role with name '" + requestDto.name() + "' already exists");
+                return ResponseUtil.badRequest("Role with name '" + requestDto.name() + "' already exists");
             }
-            throw new BadRequestException("Failed to create role: " + e.getMessage());
+            return ResponseUtil.badRequest("Failed to create role: " + e.getMessage());
         }
     }
 
     @Override
-    public ApiResponse<RoleResponse> getById(Long id) throws ResourceNotFoundException {
+    public ResponseEntity<ApiResponse<RoleResponse>> getById(Long id) throws ResourceNotFoundException {
         log.info("Fetching role with ID: {}", id);
 
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
 
-        return ApiResponse.success(prepareRoleResponse(role), "Role retrieved successfully");
+        return ResponseUtil.success(prepareRoleResponse(role), "Role retrieved successfully");
     }
 
     @Override
-    public ApiResponse<List<RoleResponse>> getAll() {
+    public ResponseEntity<ApiResponse<List<RoleResponse>>> getAll() {
         log.info("Fetching all roles");
 
         try {
@@ -78,7 +77,7 @@ public class RoleService implements GenericCrudService<RoleRequest, RoleResponse
                     .toList();
 
             log.info("Successfully fetched {} roles", rolesList.size());
-            return ApiResponse.success(rolesList, "Roles retrieved successfully");
+            return ResponseUtil.success(rolesList, "Roles retrieved successfully");
         } catch (Exception e) {
             log.error("Error fetching roles: {}", e.getMessage());
             throw new RuntimeException("Failed to fetch roles: " + e.getMessage());
