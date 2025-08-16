@@ -1,12 +1,13 @@
 package com.panwar.healthcheck.common.config.jwt;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -32,7 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		final String username;
 
 		// If authentication header missing or not in valid format
-		if (authHeader == null || !authHeader.contains(SecurityConstants.BEARER_PREFIX)) {
+		if (authHeader == null || !authHeader.startsWith(SecurityConstants.BEARER_PREFIX)) {
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -45,9 +46,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
 			if (userDetails != null && jwtService.isValidToken(token, userDetails.getUsername())) {
+				// Extract role from token claims
+				String role = jwtService.extractRole(token);
+
+				// Create authentication token and set it in the security context
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
-						null, userDetails.getAuthorities());
-				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+						null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role)));
+				SecurityContextHolder.getContext().setAuthentication(authToken);
 			}
 		}
 

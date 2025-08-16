@@ -1,7 +1,7 @@
 package com.panwar.healthcheck.models.dto;
 
-import com.panwar.healthcheck.utils.enums.UserRoleEnum;
+import jakarta.validation.constraints.NotNull;
 
-public record RoleRequest(UserRoleEnum name, String description) {
+public record RoleRequest(@NotNull(message = "Role name cannot be null")  String name, String description) {
 
 }

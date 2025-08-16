@@ -94,10 +94,10 @@ public class JwtService {
 		final var now = System.currentTimeMillis();
 
 		if (expiration != null) {
-			return now < expiration.getTime();
+			return now > expiration.getTime();
 		}
 
-		return false;
+		return true;
 	}
 
 	/**
@@ -135,5 +135,10 @@ public class JwtService {
 	 */
 	private SecretKey getSigningKey() {
 		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+	}
+
+	// Extracts the role from the JWT token.
+	public String extractRole(String token) {
+		return extractClaim(token, claims -> claims.get("role", String.class));
 	}
 }

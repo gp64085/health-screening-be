@@ -34,12 +34,13 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(corsConfigurationSource()))
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/api/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-								"/swagger-resources/**", "/webjars/**", "roles/**")
+						.requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
+								"/swagger-resources/**", "/webjars/**")
 						.permitAll()
 
-						.requestMatchers("/api/admin/**").hasRole("ADMIN").requestMatchers("/api/user/**")
-						.hasAnyRole("USER", "ADMIN")
+						.requestMatchers("/roles/**").hasAnyAuthority("ROLE_ADMIN")
+						.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+						.requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 
 						.anyRequest().authenticated())
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -1,7 +1,9 @@
 package com.panwar.healthcheck.common.services;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import com.panwar.healthcheck.common.exceptions.ResourceNotFoundException;
 import com.panwar.healthcheck.models.dto.ApiResponse;
 
 public interface GenericCrudService<Req, Res, ID> {
@@ -11,7 +13,7 @@ public interface GenericCrudService<Req, Res, ID> {
      * @param id
      * @return return element
      */
-    Res getById(ID id);
+    ApiResponse<Res> getById(ID id) throws ResourceNotFoundException;
 
     /**
      * Get all elements
@@ -19,15 +21,15 @@ public interface GenericCrudService<Req, Res, ID> {
     */
     ApiResponse<List<Res>> getAll();
 
-    default Res create(Req requestDto) {
+    default ApiResponse<Res> create(Req requestDto) throws SQLException {
         throw new UnsupportedOperationException("Create operation is not supported");
     }
-    
-    default Res update(ID id, Req requestDto) {
+
+    default ApiResponse<Res> update(ID id, Req requestDto) {
         throw new UnsupportedOperationException("Update operation is not supported");
     }
 
-    default void delete(ID id) {
+    default ApiResponse<Void> delete(ID id) {
         throw new UnsupportedOperationException("Delete operation is not supported");
     }
 }

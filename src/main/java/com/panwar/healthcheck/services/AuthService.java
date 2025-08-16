@@ -28,7 +28,7 @@ public class AuthService {
 	private final JwtService jwtService;
 
 	public ApiResponse<AuthResponse> register(RegisterRequest requestDto) {
-		Role role = roleRepository.findByName(UserRoleEnum.ADMIN).orElse(null);
+		Role role = roleRepository.findByName(UserRoleEnum.USER).orElse(null);
 		User user = User.builder().name(requestDto.name()).email(requestDto.email())
 				.password(passwordEncoder.encode(requestDto.password())).mobile(requestDto.mobile()).active(true)
 				.role(role).build();
