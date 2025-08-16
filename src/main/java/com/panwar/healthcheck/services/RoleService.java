@@ -1,8 +1,8 @@
 package com.panwar.healthcheck.services;
 
-import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +48,8 @@ public class RoleService implements GenericCrudService<RoleRequest, RoleResponse
             return ResponseUtil.created(prepareRoleResponse(savedRole), "Role created successfully");
         } catch (Exception e) {
             log.error("Error creating role: {}", e.getMessage());
-            if (e instanceof SQLException && e.getCause() != null && e.getCause().getMessage().contains("duplicate")) {
+            if (e instanceof DataIntegrityViolationException && e.getCause() != null
+                    && e.getCause().getMessage().contains("duplicate")) {
                 log.error("SQL error creating role: {}", e.getCause());
                 return ResponseUtil.badRequest("Role with name '" + requestDto.name() + "' already exists");
             }

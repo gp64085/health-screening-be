@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import com.panwar.healthcheck.services.RoleService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -31,7 +34,7 @@ public class RoleController implements GenericCrudController<RoleRequest, RoleRe
     @Operation(summary = "Create a role", description = "Create a new role")
     @Override
     @PostMapping()
-    public ResponseEntity<ApiResponse<RoleResponse>> create(@RequestBody RoleRequest requestDto) {
+    public ResponseEntity<ApiResponse<RoleResponse>> create(@Valid @RequestBody RoleRequest requestDto) {
         return roleService.create(requestDto);
     }
 
@@ -41,7 +44,9 @@ public class RoleController implements GenericCrudController<RoleRequest, RoleRe
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Success", content = @io.swagger.v3.oas.annotations.media.Content(schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = RoleResponse.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Not Found")
     })
-    public ResponseEntity<ApiResponse<RoleResponse>> getById(Long id) throws ResourceNotFoundException {
+    public ResponseEntity<ApiResponse<RoleResponse>> getById(
+            @PathVariable @Min(value = 1, message = "Id must be greater than 0") Long id)
+            throws ResourceNotFoundException {
         return roleService.getById(id);
     }
 
@@ -53,4 +58,3 @@ public class RoleController implements GenericCrudController<RoleRequest, RoleRe
     }
 
 }
-
