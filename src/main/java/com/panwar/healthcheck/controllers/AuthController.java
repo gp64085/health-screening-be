@@ -1,5 +1,6 @@
 package com.panwar.healthcheck.controllers;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,13 +28,13 @@ public class AuthController {
 	
 	@Operation(description = "Register a new user", method = "POST")
 	@PostMapping("register")
-	public ApiResponse<AuthResponse> create(@Valid @RequestBody RegisterRequest requestDto) {
+	public ResponseEntity<ApiResponse<AuthResponse>> create(@Valid @RequestBody RegisterRequest requestDto) {
 		return authService.register(requestDto);
 	}
 	
 	@Operation(description = "Login a user", method = "POST")
 	@PostMapping("login")
-	public ApiResponse<AuthResponse> login(@Valid @RequestBody LoginRequest requestDto) {
+	public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest requestDto) {
 		return authService.login(requestDto);
 	}
 	
