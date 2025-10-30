@@ -9,4 +9,5 @@ public final class ValidationMessages {
 	public static final String EMAIL_REQUIRED = "Email is required.";
 	public static final String PASSWORD_REQUIRED = "Password is required.";
 	public static final String PASSWORD_VALIDATION = "Password must be 8-20 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character (@, $, !, %, *, ?, or &).";
+    public static final String INVALID_NAME = "Invalid name";
 }

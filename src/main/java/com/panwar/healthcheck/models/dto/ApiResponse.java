@@ -1,7 +1,7 @@
 package com.panwar.healthcheck.models.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -12,7 +12,7 @@ public record ApiResponse<T>(
     boolean success, 
     LocalDateTime timestamp,
     String errorCode,
-    List<String> errors
+    Map<String, String> errors
 ) {
     /**
      * Helper method to create success response
@@ -64,7 +64,7 @@ public record ApiResponse<T>(
      * @param errors
      * @return
      */
-    public static <T> ApiResponse<T> error(String message, String errorCode, List<String> errors) {
+    public static <T> ApiResponse<T> error(String message, String errorCode, Map<String, String> errors) {
         return new ApiResponse<>(null, message, false, LocalDateTime.now(), errorCode, errors);
     }
 }

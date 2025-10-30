@@ -1,6 +1,6 @@
 package com.panwar.healthcheck.utils;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +43,7 @@ public class ResponseUtil {
     /**
      * Create a bad request response with validation errors
      */
-    public static <T> ResponseEntity<ApiResponse<T>> badRequest(String message, List<String> errors) {
+    public static <T> ResponseEntity<ApiResponse<T>> badRequest(String message, Map<String, String> errors) {
         return ResponseEntity.badRequest()
                 .body(ApiResponse.error(message, ErrorCode.VALIDATION_ERROR.getCode(), errors));
     }

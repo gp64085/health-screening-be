@@ -1,7 +1,7 @@
 package com.panwar.healthcheck.common.config;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,14 +37,14 @@ public class GlobalExceptionHandler {
         public ResponseEntity<ApiResponse<Object>> handleValidationExceptions(
                         MethodArgumentNotValidException ex) {
 
-                List<String> errors = new ArrayList<>();
+                Map<String, String> errors = new HashMap<>();
                 ex.getBindingResult().getAllErrors().forEach(error -> {
                         var message = error.getDefaultMessage();
                         if (error instanceof FieldError) {
                                 var fieldName = ((FieldError) error).getField();
-                                errors.add(fieldName + ": " + message);
+                                errors.put(fieldName, message);
                         } else {
-                                errors.add(error.getObjectName() + ": " + message);
+                                errors.put(error.getObjectName(), message);
                         }
                 });
 

@@ -29,7 +29,7 @@ public class RoleService implements GenericCrudService<RoleRequest, RoleResponse
     public ResponseEntity<ApiResponse<RoleResponse>> create(RoleRequest requestDto) {
         log.info("Creating new role with name: {}", requestDto.name());
 
-        UserRoleEnum roleEnum = UserRoleEnum.fromString(requestDto.name());
+        UserRoleEnum roleEnum = requestDto.name();
 
         // Check if role with same name already exists
         if (roleRepository.existsByName(roleEnum)) {

@@ -29,5 +29,6 @@ public class Role extends AbstractBaseEntity {
 	private String description;
 	
 	@Column(nullable = false)
+	@Builder.Default
 	private Boolean active = true;
 }
