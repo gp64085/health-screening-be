@@ -17,7 +17,7 @@ import lombok.Data;
 public abstract class AbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @CreationTimestamp
     @Column(updatable = false)

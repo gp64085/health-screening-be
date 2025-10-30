@@ -10,5 +10,10 @@ import com.panwar.healthcheck.models.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByEmail(String email);
+
 	Optional<User> findByEmailAndActiveTrue(String email);
+
+	int countByActiveTrue();
+
+	int countByDeletedTrue();
 }

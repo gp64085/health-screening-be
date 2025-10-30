@@ -46,7 +46,12 @@ public class User extends AbstractBaseEntity implements UserDetails {
 	private Role role;
 
 	@Column(nullable = false)
+	@Builder.Default
 	private Boolean active = true;
+
+	@Column(nullable = false)
+	@Builder.Default
+	private Boolean deleted = false;
 
 	@Override
 	@JsonIgnore
